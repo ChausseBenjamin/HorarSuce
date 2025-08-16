@@ -1,0 +1,28 @@
+{
+  "manifest_version": 2,
+  "name": "Grade Progress Tracker",
+  "version": "1.0",
+  "description": "Displays grade progress graphs and trend analysis for UdeS grade sheets",
+
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.gegi.usherbrooke.ca/grille-notes*",
+        "https://gegi.usherbrooke.ca/grille-notes*"
+      ],
+      "js": ["grade-calculations.js", "content.js"],
+      "css": ["styles.css"],
+      "run_at": "document_end"
+    }
+  ],
+
+  "web_accessible_resources": [
+    "*.png",
+    "*.svg"
+  ]
+}

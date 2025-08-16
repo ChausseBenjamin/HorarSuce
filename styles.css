@@ -1,0 +1,111 @@
+/* Override the class name column width to accommodate graphs */
+.grid.bordered {
+  grid-template-columns: [ap-start] 280px [ap-end evaluation-start] 300px [evaluation-end total-start] 122px [total-end competences-start] repeat(var(--competence-count, 4), 122px) [competences-end] !important;
+}
+
+#columns-header-competences {
+  grid-template-columns: [ap-start] 280px [ap-end evaluation-start] 300px [evaluation-end total-start] 122px [total-end competences-start] repeat(4, 122px) [competences-end] !important;
+}
+
+/* Compact graph styling for column placement */
+.grade-graph-container {
+  margin: 4px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+  background: #f9f9f9;
+  width: 100%;
+  max-width: 260px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.grade-graph {
+  width: 244px;
+  height: 244px;
+  border: 1px solid #ddd;
+  background: white;
+  margin: 0 auto;
+  display: block;
+  box-sizing: border-box;
+}
+
+.grade-trends {
+  margin-top: 4px;
+  font-size: 10px;
+  line-height: 1.3;
+  text-align: center;
+}
+
+.trends-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+  font-size: 11px;
+}
+
+.trend-cell {
+  padding: 4px 6px;
+  border: 1px solid #ddd;
+  text-align: center;
+  vertical-align: middle;
+  width: 50%;
+}
+
+.trend-label {
+  font-weight: bold;
+  color: #333;
+  font-size: 10px;
+  line-height: 1.2;
+  margin-bottom: 2px;
+}
+
+.trend-value {
+  color: #666;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.trend-positive {
+  color: #008000;
+}
+
+.trend-negative {
+  color: #cc0000;
+}
+
+.trend-neutral {
+  color: #666;
+}
+
+/* Ensure the ap-title cell can accommodate the graph */
+.ap-title {
+  min-height: auto !important;
+  height: auto !important;
+  overflow: visible !important;
+  position: relative !important;
+}
+
+/* Dark mode support */
+[data-darkreader-mode="dynamic"] .grade-graph-container {
+  background: #2a2a2a;
+  border-color: #555;
+  color: #e8e6e3;
+}
+
+[data-darkreader-mode="dynamic"] .grade-graph {
+  background: #1a1a1a;
+  border-color: #444;
+}
+
+[data-darkreader-mode="dynamic"] .trend-cell {
+  border-color: #555;
+}
+
+[data-darkreader-mode="dynamic"] .trend-label {
+  color: #e8e6e3;
+}
+
+[data-darkreader-mode="dynamic"] .trend-value {
+  color: #b0b0b0;
+}
