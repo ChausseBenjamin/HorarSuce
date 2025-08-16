@@ -1,0 +1,67 @@
+name: Release Extension
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Extract version from tag
+      id: version
+      run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+    - name: Update manifest version
+      run: |
+        sed -i 's/"version": "[^"]*"/"version": "${{ steps.version.outputs.VERSION }}"/' manifest.json
+
+    - name: Create extension package
+      run: |
+        zip -r horarSuce-v${{ steps.version.outputs.VERSION }}.zip \
+          manifest.json \
+          content.js \
+          grade-calculations.js \
+          style.css \
+          icon-16.png \
+          icon-48.png \
+          icon-128.png \
+          -x "*.git*" "test.html" "logo.png" "README.md" "INSTALL.md"
+
+    - name: Generate checksums
+      run: |
+        sha256sum horarSuce-v${{ steps.version.outputs.VERSION }}.zip > horarSuce-v${{ steps.version.outputs.VERSION }}.sha256
+        md5sum horarSuce-v${{ steps.version.outputs.VERSION }}.zip > horarSuce-v${{ steps.version.outputs.VERSION }}.md5
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          horarSuce-v${{ steps.version.outputs.VERSION }}.zip
+          horarSuce-v${{ steps.version.outputs.VERSION }}.sha256
+          horarSuce-v${{ steps.version.outputs.VERSION }}.md5
+        generate_release_notes: true
+        name: HorarSuce v${{ steps.version.outputs.VERSION }}
+        body: |
+          ## HorarSuce v${{ steps.version.outputs.VERSION }}
+
+          Horarius Sucks! This is an attempt to make it suck less
+
+          ### Installation
+          1. Download `horarSuce-v${{ steps.version.outputs.VERSION }}.zip`
+          2. Verify integrity with provided checksums
+          3. Load as temporary add-on in Firefox or submit to AMO
+
+          ### Checksums
+          - SHA256: See `.sha256` file
+          - MD5: See `.md5` file
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
