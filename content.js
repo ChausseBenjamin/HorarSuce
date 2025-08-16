@@ -376,30 +376,66 @@
             
             const remainingClass = 'trend-neutral';
             
-            container.innerHTML = `
-                <table class="trends-table">
-                    <tr>
-                        <td class="trend-cell">
-                            <div class="trend-label">Required for D</div>
-                            <div class="trend-value ${requiredDClass}">${trends.requiredTrend.toFixed(1)}%</div>
-                        </td>
-                        <td class="trend-cell">
-                            <div class="trend-label">Required for A</div>
-                            <div class="trend-value ${requiredAClass}">${requiredForA.toFixed(1)}%</div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="trend-cell">
-                            <div class="trend-label">Current Trend</div>
-                            <div class="trend-value ${currentTrendClass}">${trends.currentTrend.toFixed(1)}%</div>
-                        </td>
-                        <td class="trend-cell">
-                            <div class="trend-label">Remaining</div>
-                            <div class="trend-value ${remainingClass}">${trends.remainingPercentage.toFixed(1)}%</div>
-                        </td>
-                    </tr>
-                </table>
-            `;
+            const table = document.createElement('table');
+            table.className = 'trends-table';
+            
+            const row1 = document.createElement('tr');
+            
+            const cell1 = document.createElement('td');
+            cell1.className = 'trend-cell';
+            const label1 = document.createElement('div');
+            label1.className = 'trend-label';
+            label1.textContent = 'Required for D';
+            const value1 = document.createElement('div');
+            value1.className = `trend-value ${requiredDClass}`;
+            value1.textContent = `${trends.requiredTrend.toFixed(1)}%`;
+            cell1.appendChild(label1);
+            cell1.appendChild(value1);
+            
+            const cell2 = document.createElement('td');
+            cell2.className = 'trend-cell';
+            const label2 = document.createElement('div');
+            label2.className = 'trend-label';
+            label2.textContent = 'Required for A';
+            const value2 = document.createElement('div');
+            value2.className = `trend-value ${requiredAClass}`;
+            value2.textContent = `${requiredForA.toFixed(1)}%`;
+            cell2.appendChild(label2);
+            cell2.appendChild(value2);
+            
+            row1.appendChild(cell1);
+            row1.appendChild(cell2);
+            
+            const row2 = document.createElement('tr');
+            
+            const cell3 = document.createElement('td');
+            cell3.className = 'trend-cell';
+            const label3 = document.createElement('div');
+            label3.className = 'trend-label';
+            label3.textContent = 'Current Trend';
+            const value3 = document.createElement('div');
+            value3.className = `trend-value ${currentTrendClass}`;
+            value3.textContent = `${trends.currentTrend.toFixed(1)}%`;
+            cell3.appendChild(label3);
+            cell3.appendChild(value3);
+            
+            const cell4 = document.createElement('td');
+            cell4.className = 'trend-cell';
+            const label4 = document.createElement('div');
+            label4.className = 'trend-label';
+            label4.textContent = 'Remaining';
+            const value4 = document.createElement('div');
+            value4.className = `trend-value ${remainingClass}`;
+            value4.textContent = `${trends.remainingPercentage.toFixed(1)}%`;
+            cell4.appendChild(label4);
+            cell4.appendChild(value4);
+            
+            row2.appendChild(cell3);
+            row2.appendChild(cell4);
+            
+            table.appendChild(row1);
+            table.appendChild(row2);
+            container.appendChild(table);
             
             return container;
         }

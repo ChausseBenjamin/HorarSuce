@@ -30,7 +30,7 @@ jobs:
           manifest.json \
           content.js \
           grade-calculations.js \
-          style.css \
+          styles.css \
           icon-16.png \
           icon-48.png \
           icon-128.png \
