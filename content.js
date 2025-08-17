@@ -501,10 +501,78 @@
             console.log('Visualization injection complete');
         }
 
+        observeSemesterChanges() {
+            const semesterSelect = document.getElementById('trimesters');
+            if (!semesterSelect) {
+                console.log('No semester select found');
+                return;
+            }
+
+            console.log('Setting up semester change observation');
+            
+            // Listen for changes to the semester dropdown
+            semesterSelect.addEventListener('change', () => {
+                console.log('Semester changed, reinitializing grade tracker...');
+                
+                // Clear existing data and visualizations
+                this.classes.clear();
+                const existingViz = document.querySelectorAll('.grade-graph-container');
+                existingViz.forEach(el => el.remove());
+                
+                // Reset processing flag
+                this.processed = false;
+                
+                // Wait for new content to load, then reprocess
+                setTimeout(() => {
+                    this.debouncedProcessGrades();
+                }, 1500); // Give some time for the new semester data to load
+            });
+
+            // Also observe for DOM changes in the list container when semester changes
+            const listContainer = document.getElementById('list');
+            if (listContainer) {
+                const listObserver = new MutationObserver((mutations) => {
+                    // Check if significant content has changed (new classes added/removed)
+                    let hasSignificantChange = false;
+                    
+                    mutations.forEach((mutation) => {
+                        if (mutation.type === 'childList' && 
+                            (mutation.addedNodes.length > 0 || mutation.removedNodes.length > 0)) {
+                            // Check if added/removed nodes are class containers (have IDs)
+                            const relevantNodes = [...mutation.addedNodes, ...mutation.removedNodes].filter(node => 
+                                node.nodeType === Node.ELEMENT_NODE && node.id
+                            );
+                            if (relevantNodes.length > 0) {
+                                hasSignificantChange = true;
+                            }
+                        }
+                    });
+                    
+                    if (hasSignificantChange && !this.isProcessing) {
+                        console.log('Significant content change detected, reprocessing grades...');
+                        
+                        // Clear existing visualizations
+                        const existingViz = document.querySelectorAll('.grade-graph-container');
+                        existingViz.forEach(el => el.remove());
+                        
+                        // Reset and reprocess
+                        this.processed = false;
+                        this.debouncedProcessGrades();
+                    }
+                });
+                
+                listObserver.observe(listContainer, { 
+                    childList: true, 
+                    subtree: true 
+                });
+            }
+        }
+
         setupFilterObservation() {
             // Wait a bit for the page to fully load before setting up observers
             setTimeout(() => {
                 this.observeFilterChanges();
+                this.observeSemesterChanges();
             }, 2000);
         }
 
